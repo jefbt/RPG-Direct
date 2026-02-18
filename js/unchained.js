@@ -1,4 +1,4 @@
-const APP_VERSION = '0.21.0';
+const APP_VERSION = '0.22.0';
 window.APP_VERSION = APP_VERSION;
 
 const peerIdDisplay = document.getElementById('peer-id');

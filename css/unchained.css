@@ -1,0 +1,205 @@
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&family=Inter:wght@400;700&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+}
+
+.fantasy-font {
+    font-family: 'MedievalSharp', cursive;
+}
+
+.dice-btn {
+    transition: transform 0.1s;
+}
+
+.dice-btn:active {
+    transform: scale(0.9);
+}
+
+/* Checkbox Customizado */
+.recipient-checkbox:checked + div {
+    background-color: #d97706; /* amber-600 */
+    border-color: #d97706;
+    color: white;
+}
+
+.recipient-checkbox:not(:checked) + div {
+    background-color: #27272a; /* zinc-800 */
+    border-color: #3f3f46; /* zinc-700 */
+    color: #a1a1aa; /* zinc-400 */
+}
+
+/* Radio Button Customizado (Modos de Rolagem) */
+.roll-mode-radio:checked + div {
+    background-color: #be185d; /* pink-700 */
+    border-color: #be185d;
+    color: white;
+}
+
+.roll-mode-radio:not(:checked) + div {
+    background-color: #27272a;
+    border-color: #3f3f46;
+    color: #71717a;
+}
+
+/* Animação de destaque */
+@keyframes highlight-fade {
+    0% { background-color: rgba(217, 119, 6, 0.3); }
+    100% { background-color: transparent; }
+}
+.highlight-message {
+    animation: highlight-fade 2s ease-out;
+}
+
+/* Animação de pulso */
+@keyframes pulse-ring {
+    0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+    70% { box-shadow: 0 0 0 4px rgba(255, 255, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+}
+.pulse-select {
+    animation: pulse-ring 0.3s cubic-bezier(0.24, 0, 0.38, 1);
+}
+
+/* Scrollbar oculta */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* Botões de Resposta */
+.message-actions {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    z-index: 50; /* Aumentado para garantir clique */
+}
+.message-container:hover .message-actions {
+    opacity: 1;
+    pointer-events: auto;
+}
+.message-bubble.show-actions .message-actions {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+ .message-timestamp {
+     opacity: 0;
+     pointer-events: none;
+     position: absolute;
+     top: -18px;
+     right: 8px;
+     font-size: 10px;
+     line-height: 1;
+     color: #a1a1aa;
+     background: rgba(9, 9, 11, 0.75);
+     border: 1px solid rgba(63, 63, 70, 0.6);
+     padding: 2px 6px;
+     border-radius: 6px;
+     backdrop-filter: blur(6px);
+     transition: opacity 0.2s;
+     z-index: 60;
+     white-space: nowrap;
+ }
+
+ .message-container:hover .message-timestamp {
+     opacity: 1;
+ }
+
+ .message-bubble.show-actions .message-timestamp {
+     opacity: 1;
+ }
+
+/* Estilo do Editor de Macro */
+.drop-zone {
+    min-height: 50px;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+.drop-zone.active {
+    border-color: #d97706;
+    background-color: rgba(217, 119, 6, 0.1);
+}
+.macro-item {
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+.macro-item:hover {
+    transform: scale(1.05);
+}
+
+/* Drag & Drop Visuals */
+body.drag-active .chat-container {
+    border: 2px dashed #4ade80; /* emerald-400 */
+    background-color: rgba(74, 222, 128, 0.1);
+    position: relative;
+}
+body.drag-active .chat-container::after {
+    content: 'Solte a imagem aqui';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'MedievalSharp', cursive;
+    font-size: 2rem;
+    color: #4ade80;
+    pointer-events: none;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+}
+
+/* Estilos para Imagens Colapsáveis */
+.image-wrapper.collapsed .image-content { display: none; }
+.image-wrapper.collapsed .collapsed-placeholder { display: block; }
+.image-wrapper.collapsed .image-actions { display: none; } /* Esconde botões quando fechado */
+
+/* Estilo para Mensagem Apagada (Visão do Mestre) */
+.deleted-message-master-view {
+    opacity: 0.6;
+    background-color: rgba(69, 10, 10, 0.3) !important; /* red-950/30 */
+    border-color: rgba(127, 29, 29, 0.5) !important; /* red-900/50 */
+    text-decoration: line-through;
+    position: relative;
+}
+.deleted-message-master-view::after {
+    content: 'APAGADA';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-10deg);
+    font-size: 2rem;
+    color: rgba(220, 38, 38, 0.2);
+    font-weight: bold;
+    pointer-events: none;
+}
+.deleted-message-master-view .message-actions {
+    display: none !important;
+}
+
+/* Soft-delete placeholder bubble */
+.deleted-placeholder .message-bubble {
+    opacity: 0.8;
+}
+
+.deleted-placeholder-bubble {
+    text-decoration: none;
+}
+
+/* Botão Scroll Down */
+#scroll-down-btn {
+    transition: opacity 0.3s, transform 0.2s, background-color 0.2s;
+}
+#scroll-down-btn.hidden-btn {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
+}
+#scroll-down-btn.has-new {
+    background-color: #d97706; /* amber-600 */
+    color: white;
+    animation: pulse-ring 2s infinite;
+}

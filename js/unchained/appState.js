@@ -32,8 +32,8 @@ export const App = (() => {
         chatImportFile: document.getElementById('chat-import-file'),
         macroEditor: document.getElementById('macro-editor'),
         macrosContainer: document.getElementById('macros-container'),
-        zoneHighest: document.getElementById('zone-highest'),
-        zoneLowest: document.getElementById('zone-lowest'),
+        zoneKeep: document.getElementById('zone-keep'),
+        zoneThreshold: document.getElementById('zone-threshold'),
         zoneSum: document.getElementById('zone-sum'),
         body: document.body
     };
@@ -70,8 +70,8 @@ export const App = (() => {
         editorState: {
             name: '',
             icon: '⚔️',
-            highest: [],
-            lowest: [],
+            keep: [],
+            threshold: [],
             sum: []
         }
     };

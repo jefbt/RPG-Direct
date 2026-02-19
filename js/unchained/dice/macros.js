@@ -27,9 +27,25 @@ export function openMacroEditor(isNew, macroIndex = null) {
     state.editingMacroId = isNew ? null : macroIndex;
 
     if (isNew) {
-        state.editorState = { name: '', icon: '⚔️', highest: [], lowest: [], sum: [] };
+        state.editorState = { name: '', icon: '⚔️', keep: [], threshold: [], sum: [] };
     } else {
         state.editorState = JSON.parse(JSON.stringify(state.macros[macroIndex]));
+    }
+
+    if (!Array.isArray(state.editorState.keep)) state.editorState.keep = [];
+    if (!Array.isArray(state.editorState.threshold)) state.editorState.threshold = [];
+    if (!Array.isArray(state.editorState.sum)) state.editorState.sum = [];
+
+    if (state.editorState.keep.length === 0) {
+        if (Array.isArray(state.editorState.highest) && state.editorState.highest.length > 0) {
+            state.editorState.keep = [...state.editorState.highest];
+            const keepModeEl = document.getElementById('keep-mode');
+            if (keepModeEl) keepModeEl.value = 'highest';
+        } else if (Array.isArray(state.editorState.lowest) && state.editorState.lowest.length > 0) {
+            state.editorState.keep = [...state.editorState.lowest];
+            const keepModeEl = document.getElementById('keep-mode');
+            if (keepModeEl) keepModeEl.value = 'lowest';
+        }
     }
 
     document.getElementById('macro-name').value = state.editorState.name;
@@ -45,30 +61,37 @@ export function closeMacroEditor() {
 
 export function selectZone(zone) {
     state.selectedZone = zone;
-    dom.zoneHighest.classList.remove('active');
-    dom.zoneLowest.classList.remove('active');
+    dom.zoneKeep.classList.remove('active');
+    dom.zoneThreshold.classList.remove('active');
     dom.zoneSum.classList.remove('active');
 
-    if (zone === 'highest') dom.zoneHighest.classList.add('active');
-    if (zone === 'lowest') dom.zoneLowest.classList.add('active');
+    if (zone === 'keep') dom.zoneKeep.classList.add('active');
+    if (zone === 'threshold') dom.zoneThreshold.classList.add('active');
     if (zone === 'sum') dom.zoneSum.classList.add('active');
 }
 
 export function addDieToSelectedZone(sides) {
-    if (state.selectedZone === 'highest') state.editorState.highest.push({ type: 'die', sides: sides });
-    if (state.selectedZone === 'lowest') state.editorState.lowest.push({ type: 'die', sides: sides });
+    if (state.selectedZone === 'keep') state.editorState.keep.push({ type: 'die', sides: sides });
+    if (state.selectedZone === 'threshold') state.editorState.threshold.push({ type: 'die', sides: sides });
     if (state.selectedZone === 'sum') state.editorState.sum.push({ type: 'die', sides: sides });
     renderEditorZones();
 }
 
 export function addGroupToSum(type) {
-    if (type === 'highest' && state.editorState.highest.length > 0) {
-        state.editorState.sum.push({ type: 'group', mode: 'highest', items: [...state.editorState.highest] });
-        state.editorState.highest = [];
+    if (type === 'keep' && state.editorState.keep.length > 0) {
+        const mode = document.getElementById('keep-mode')?.value === 'lowest' ? 'lowest' : 'highest';
+        state.editorState.sum.push({ type: 'group', mode, items: [...state.editorState.keep] });
+        state.editorState.keep = [];
     }
-    if (type === 'lowest' && state.editorState.lowest.length > 0) {
-        state.editorState.sum.push({ type: 'group', mode: 'lowest', items: [...state.editorState.lowest] });
-        state.editorState.lowest = [];
+
+    if (type === 'threshold' && state.editorState.threshold.length > 0) {
+        const compareRaw = document.getElementById('threshold-compare')?.value;
+        const compare = compareRaw === 'lte' ? 'lte' : 'gte';
+        const target = parseInt(document.getElementById('threshold-target')?.value);
+        if (Number.isNaN(target)) return;
+
+        state.editorState.sum.push({ type: 'threshold', compare, target, items: [...state.editorState.threshold] });
+        state.editorState.threshold = [];
     }
     renderEditorZones();
 }
@@ -83,8 +106,8 @@ export function addModToSum() {
 }
 
 export function removeFromZone(zone, index) {
-    if (zone === 'highest') state.editorState.highest.splice(index, 1);
-    if (zone === 'lowest') state.editorState.lowest.splice(index, 1);
+    if (zone === 'keep') state.editorState.keep.splice(index, 1);
+    if (zone === 'threshold') state.editorState.threshold.splice(index, 1);
     if (zone === 'sum') state.editorState.sum.splice(index, 1);
     renderEditorZones();
 }
@@ -97,11 +120,16 @@ function renderEditorZones() {
             const content = item.items.map(sub => `d${sub.sides}`).join(',');
             return `<div onclick="event.stopPropagation(); window.removeFromZone('${z}', ${i})" class="bg-zinc-900 border border-zinc-600 px-2 rounded text-[10px] hover:bg-red-900 cursor-pointer flex flex-col items-center"><span>${item.mode === 'highest' ? 'Maior' : 'Menor'}</span><span class="text-zinc-400">(${content})</span></div>`;
         }
+        if (item.type === 'threshold') {
+            const content = item.items.map(sub => `d${sub.sides}`).join(',');
+            const label = item.compare === 'lte' ? '≤' : '≥';
+            return `<div onclick="event.stopPropagation(); window.removeFromZone('${z}', ${i})" class="bg-zinc-900 border border-zinc-600 px-2 rounded text-[10px] hover:bg-red-900 cursor-pointer flex flex-col items-center"><span>Threshold (${label}${item.target})</span><span class="text-zinc-400">(${content})</span></div>`;
+        }
         return '';
     };
 
-    dom.zoneHighest.innerHTML = state.editorState.highest.map((it, i) => renderItem(it, 'highest', i)).join('');
-    dom.zoneLowest.innerHTML = state.editorState.lowest.map((it, i) => renderItem(it, 'lowest', i)).join('');
+    dom.zoneKeep.innerHTML = state.editorState.keep.map((it, i) => renderItem(it, 'keep', i)).join('');
+    dom.zoneThreshold.innerHTML = state.editorState.threshold.map((it, i) => renderItem(it, 'threshold', i)).join('');
     dom.zoneSum.innerHTML = state.editorState.sum.map((it, i) => renderItem(it, 'sum', i)).join('');
 }
 
@@ -226,6 +254,22 @@ export function rollMacro(e, index) {
             totalSum += selected;
             const rollsStr = rolls.map(r => r === selected ? `<b class="text-amber-400">${r}</b>` : `<span class="opacity-50">${r}</span>`).join(',');
             breakdownParts.push(`[${item.mode === 'highest' ? 'Maior' : 'Menor'}(${rollsStr}) → <b>${selected}</b>]`);
+        } else if (item.type === 'threshold') {
+            const compare = item.compare === 'lte' ? 'lte' : 'gte';
+            const target = parseInt(item.target);
+            if (!Array.isArray(item.items) || Number.isNaN(target)) return;
+
+            const rolls = item.items.map(sub => Math.floor(Math.random() * sub.sides) + 1);
+            const successes = rolls.map((r) => {
+                if (compare === 'lte') return r <= target;
+                return r >= target;
+            });
+            const successCount = successes.reduce((acc, ok) => acc + (ok ? 1 : 0), 0);
+
+            totalSum += successCount;
+            const symbol = compare === 'lte' ? '≤' : '≥';
+            const rollsStr = rolls.map((r, idx) => successes[idx] ? `<b class="text-amber-400">${r}</b>` : `<span class="opacity-50">${r}</span>`).join(',');
+            breakdownParts.push(`[Threshold (${symbol}${target})(${rollsStr}) → <b>${successCount}</b>]`);
         }
     });
 

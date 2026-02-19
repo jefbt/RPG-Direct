@@ -20,7 +20,9 @@ import {
     selectZone,
     addModToSum,
     rollMacro,
-    removeFromZone
+    removeFromZone,
+    updateMacroVisibility,
+    bindMacroToggle
 } from './dice/macros.js';
 import { ensureIdentityDefaults, loadIdentityFromStorage, saveIdentityToStorage } from './identity.js';
 import { initPeer, bindIdentityChangeHandlers } from './peer/peer.js';
@@ -90,6 +92,7 @@ function init() {
     updateDiceVisibility();
 
     loadMacros();
+    bindMacroToggle();
     renderMacroButtons();
 
     initPeer();

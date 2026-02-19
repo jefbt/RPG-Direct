@@ -25,6 +25,8 @@ export const App = (() => {
         btnResetId: document.getElementById('btn-reset-id'),
         scrollDownBtn: document.getElementById('scroll-down-btn'),
         toggleDiceBtn: document.getElementById('toggle-dice-btn'),
+        toggleMacrosBtn: document.getElementById('toggle-macros-btn'),
+        macrosWrapper: document.getElementById('macros-wrapper'),
         hostChatControls: document.getElementById('host-chat-controls'),
         btnExportChat: document.getElementById('btn-export-chat'),
         btnImportChat: document.getElementById('btn-import-chat'),
@@ -43,7 +45,9 @@ export const App = (() => {
         HOST_CHAT_STORAGE_KEY: 'rpg_p2p_host_chat_history_v1',
         HOST_PROFILES_STORAGE_KEY: 'rpg_p2p_host_player_profiles_v1',
         LOCAL_PROFILE_ID_KEY: 'rpg_p2p_profile_id_v1',
-        LANGUAGE_STORAGE_KEY: 'rpg_p2p_language_v1'
+        LANGUAGE_STORAGE_KEY: 'rpg_p2p_language_v1',
+        SHOW_DICE_STORAGE_KEY: 'rpg_p2p_show_dice',
+        SHOW_MACROS_STORAGE_KEY: 'rpg_p2p_show_macros'
     };
 
     const state = {
@@ -64,6 +68,7 @@ export const App = (() => {
         hasSentJoin: false,
         userHasScrolledUp: false,
         showStandardDice: true,
+        showMacros: true,
         macros: [],
         editingMacroId: null,
         selectedZone: 'sum',

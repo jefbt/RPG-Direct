@@ -1,4 +1,4 @@
-const APP_VERSION = '0.21.0';
+import { APP_VERSION } from '../unchained.js';
 
 export const App = (() => {
     const existing = window.App;

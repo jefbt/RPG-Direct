@@ -118,12 +118,12 @@ function renderEditorZones() {
         if (item.type === 'mod') return `<div onclick="event.stopPropagation(); window.removeFromZone('${z}', ${i})" class="bg-zinc-600 px-2 rounded text-xs hover:bg-red-900 cursor-pointer">${item.value >= 0 ? '+' + item.value : item.value}</div>`;
         if (item.type === 'group') {
             const content = item.items.map(sub => `d${sub.sides}`).join(',');
-            return `<div onclick="event.stopPropagation(); window.removeFromZone('${z}', ${i})" class="bg-zinc-900 border border-zinc-600 px-2 rounded text-[10px] hover:bg-red-900 cursor-pointer flex flex-col items-center"><span>${item.mode === 'highest' ? 'Maior' : 'Menor'}</span><span class="text-zinc-400">(${content})</span></div>`;
+            return `<div onclick="event.stopPropagation(); window.removeFromZone('${z}', ${i})" class="bg-zinc-900 border border-zinc-600 px-2 rounded text-[10px] hover:bg-red-900 cursor-pointer flex flex-col items-center"><span>${t('dice.' + item.mode)}</span><span class="text-zinc-400">(${content})</span></div>`;
         }
         if (item.type === 'threshold') {
             const content = item.items.map(sub => `d${sub.sides}`).join(',');
             const label = item.compare === 'lte' ? '≤' : '≥';
-            return `<div onclick="event.stopPropagation(); window.removeFromZone('${z}', ${i})" class="bg-zinc-900 border border-zinc-600 px-2 rounded text-[10px] hover:bg-red-900 cursor-pointer flex flex-col items-center"><span>Threshold (${label}${item.target})</span><span class="text-zinc-400">(${content})</span></div>`;
+            return `<div onclick="event.stopPropagation(); window.removeFromZone('${z}', ${i})" class="bg-zinc-900 border border-zinc-600 px-2 rounded text-[10px] hover:bg-red-900 cursor-pointer flex flex-col items-center"><span>${t('dice.threshold')} (${label}${item.target})</span><span class="text-zinc-400">(${content})</span></div>`;
         }
         return '';
     };
@@ -255,7 +255,7 @@ export function rollMacro(e, index) {
 
             totalSum += selected;
             const rollsStr = rolls.map(r => r === selected ? `<b class="text-amber-400">${r}</b>` : `<span class="opacity-50">${r}</span>`).join(',');
-            breakdownParts.push(`[${item.mode === 'highest' ? 'Maior' : 'Menor'}(${rollsStr}) → <b>${selected}</b>]`);
+            breakdownParts.push(`[${t('dice.' + item.mode)}(${rollsStr}) → <b>${selected}</b>]`);
         } else if (item.type === 'threshold') {
             const compare = item.compare === 'lte' ? 'lte' : 'gte';
             const target = parseInt(item.target);
@@ -271,7 +271,7 @@ export function rollMacro(e, index) {
             totalSum += successCount;
             const symbol = compare === 'lte' ? '≤' : '≥';
             const rollsStr = rolls.map((r, idx) => successes[idx] ? `<b class="text-amber-400">${r}</b>` : `<span class="opacity-50">${r}</span>`).join(',');
-            breakdownParts.push(`[Threshold (${symbol}${target})(${rollsStr}) → <b>${successCount}</b>]`);
+            breakdownParts.push(`[${t('dice.threshold')} (${symbol}${target})(${rollsStr}) → <b>${successCount}</b>]`);
         }
     });
 

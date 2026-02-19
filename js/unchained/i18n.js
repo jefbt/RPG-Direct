@@ -103,7 +103,10 @@ export const I18N = {
             blindTitle: 'Blind',
             gmTitle: 'To GM',
             selfTitle: 'Only Me',
-            groupTitle: 'Group'
+            groupTitle: 'Group',
+            highest: 'Highest',
+            lowest: 'Lowest',
+            threshold: 'Threshold'
         }
     },
     'pt-BR': {
@@ -200,13 +203,16 @@ export const I18N = {
             rollVerb: 'rola',
             deleted: 'APAGADA',
             messageDeleted: 'MENSAGEM APAGADA',
-            undoAvailable: '(undo disponível até apagar definitivo)',
+            undoAvailable: '(desfazer disponível até apagar definitivo)',
             undo: 'Desfazer',
             hardDelete: 'Apagar Definitivo',
             blindTitle: 'Cegas',
             gmTitle: 'Para Mestre',
             selfTitle: 'Apenas Eu',
-            groupTitle: 'Grupo'
+            groupTitle: 'Grupo',
+            highest: 'Maior',
+            lowest: 'Menor',
+            threshold: 'Limiar'
         }
     },
     es: {
@@ -309,7 +315,10 @@ export const I18N = {
             blindTitle: 'A ciegas',
             gmTitle: 'Para GM',
             selfTitle: 'Solo yo',
-            groupTitle: 'Grupo'
+            groupTitle: 'Grupo',
+            highest: 'Mayor',
+            lowest: 'Menor',
+            threshold: 'Umbral'
         }
     }
 };

@@ -61,13 +61,13 @@ export function closeMacroEditor() {
 
 export function selectZone(zone) {
     state.selectedZone = zone;
-    dom.zoneKeep.classList.remove('active');
-    dom.zoneThreshold.classList.remove('active');
-    dom.zoneSum.classList.remove('active');
+    if (dom.zoneKeep) dom.zoneKeep.classList.remove('active');
+    if (dom.zoneThreshold) dom.zoneThreshold.classList.remove('active');
+    if (dom.zoneSum) dom.zoneSum.classList.remove('active');
 
-    if (zone === 'keep') dom.zoneKeep.classList.add('active');
-    if (zone === 'threshold') dom.zoneThreshold.classList.add('active');
-    if (zone === 'sum') dom.zoneSum.classList.add('active');
+    if (zone === 'keep' && dom.zoneKeep) dom.zoneKeep.classList.add('active');
+    if (zone === 'threshold' && dom.zoneThreshold) dom.zoneThreshold.classList.add('active');
+    if (zone === 'sum' && dom.zoneSum) dom.zoneSum.classList.add('active');
 }
 
 export function addDieToSelectedZone(sides) {
@@ -128,9 +128,9 @@ function renderEditorZones() {
         return '';
     };
 
-    dom.zoneKeep.innerHTML = state.editorState.keep.map((it, i) => renderItem(it, 'keep', i)).join('');
-    dom.zoneThreshold.innerHTML = state.editorState.threshold.map((it, i) => renderItem(it, 'threshold', i)).join('');
-    dom.zoneSum.innerHTML = state.editorState.sum.map((it, i) => renderItem(it, 'sum', i)).join('');
+    if (dom.zoneKeep) dom.zoneKeep.innerHTML = state.editorState.keep.map((it, i) => renderItem(it, 'keep', i)).join('');
+    if (dom.zoneThreshold) dom.zoneThreshold.innerHTML = state.editorState.threshold.map((it, i) => renderItem(it, 'threshold', i)).join('');
+    if (dom.zoneSum) dom.zoneSum.innerHTML = state.editorState.sum.map((it, i) => renderItem(it, 'sum', i)).join('');
 }
 
 export function saveMacro() {
